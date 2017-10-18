@@ -17,7 +17,7 @@ def filterSolutions(comboSet, minOn, minOff):
 		while passed and index < limit:
 			if schedule[index] == "1":
 				minHours = index + minOn
-				while index <= minHours:
+				while index <= minHours and index < limit:
 					if schedule[index] == "1":
 						index += 1
 						print(index)
@@ -30,7 +30,7 @@ def filterSolutions(comboSet, minOn, minOff):
 					print(index)
 				minHours = index + minOff
 				print(index)
-				while passed and index <= minHours:
+				while passed and index <= minHours and index < limit:
 					if schedule[index] == "0":
 						index += 1
 						print(index)
