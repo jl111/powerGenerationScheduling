@@ -1,138 +1,152 @@
 import math
+import copy
+
+
 potentialSchedules = set([])
 
-MAX_STARTS = 2 
-MIN_ON = 2
-MIN_OFF = 2
-ONE = "1"
-ZERO = "0"
-TOTAL_HOURS = 5
-MIN_FULL = MIN_ON + MIN_OFF
 
-#first version..  needto address conditionals more efficiently
-def BB2(schedule):
-	length = len(schedule)
-	if length == TOTAL_HOURS: 
-		potentialSchedules.add(schedule)
-		return 
-	else:
-		#empty string
-		if length == 0:
-			BB2(schedule + ONE)
-			BB2(schedule + ZERO)
-		else: 
-			last = schedule[-1]
-			remainingHours = length + MIN_FULL
-			if remainingHours == TOTAL_HOURS:
-				if last == ZERO:
-					print("0 to FULL")
-					BB2(schedule + (ONE * MIN_ON) + (ZERO * MIN_OFF))
-					BB2(schedule + (ZERO * MIN_FULL))
-				else:
-					BB2(schedule + ZERO * MIN_FULL)
-					BB2(schedule + ONE)	
-			elif remainingHours < TOTAL_HOURS:
-				if length < MIN_ON:
-					print("len < MIN_ON")
-					if last == ONE:
-						BB2(schedule + ONE)
-			else: 
-				print("ELSE")
-				BB2(schedule + ONE)
-				BB2(schedule + ZERO)
+MAX_STARTS = 1 
+MIN_ON = 3
+MIN_OFF = 2
+TOTAL_HOURS = 6 
+MIN_FULL = MIN_ON + MIN_OFF
+SCHEDULE =  TOTAL_HOURS * [0]
+LAST_INDEX = TOTAL_HOURS - 1
+"""
+elif not schedule.minOnHoursMet():
+            newSchedule = copy.copy(schedule)
+            newSchedule.updateOne()
+            newSchedule.updateIndex()
+
+            BB(newSchedule)
+        elif not schedule.minOffHoursMet():
+            newSchedule = copy.copy(schedule)
+            newSchedule.updateIndex()
+            BB(newSchedule)
+"""
+
 
 
 class schedule:
 
-    def __init__(self, 
-    	sequence, 
-    	numStarts = 0,
-    	currentOnStart = None,
-    	currentOnEnd = None,
-    	currentOffStart = None,
-    	currentOffEnd = None,
-    	currentIndex = 0,
-    	potential = False
-    	):
-
-        self.sequence = sequence
+    def __init__(self, index = 0, schedule = SCHEDULE, 
+        numStarts = 0, onIndex = None, offIndex = None):
+        self.index = index
+        self.schedule = schedule
         self.numStarts = numStarts
-        self.currentOnStart = currentOnStart
-        self.currentOnEnd = currentOnEnd
-        self.currentOffStart = currentOffStart
-        self.currentOffEnd = currentOffEnd
-        self.currentIndex = currentIndex
-        self.potential = potential
+        self.onIndex = onIndex
+        self.offIndex = offIndex
+
+    def updateIndex(self):
+        self.index += 1
+
+    def updateOnIndex(self):
+        if (self.onIndex == None):
+            self.onIndex = 0
+        else: 
+            self.onIndex += 1
+
+    def updateOffIndex(self):
+        if (self.offIndex == None):
+            self.offIndex = 0
+        else: 
+            self.offIndex += 1
+
+    def updateNumStarts(self):
+        self.numStarts += 1
     
-    def addZero(self):
-    	self.sequence += ZERO
+    def getIndex(self):
+        return self.index
+    def getStarts(self):
+        return self.getStarts
+    def getOnIndex(self):
+        return self.onIndex
+    def getOffIndex(self):
+        return self.offIndex
+    def getSchedule(self):
+        return self.schedule
+    def getStatus(self):
+        #returns status at the hour
+        return self.schedule[self.index]
 
-    def addOne(self):
-    	self.sequence += ONE
+    def minOnHoursMet(self):
+        if (self.onIndex == None) and (self.offIndex == None):
+            #never been on
+            return True
+        elif (self.offIndex == None):
+            #currently on
+            if (self.onIndex != None):
+                if (self.index - self.onIndex) > MIN_ON:
+                    return True
+        elif (self.onIndex < self.offIndex):
+            #was on, now off, mostly for error handling
+
+            if (self.offIndex != None and self.onIndex != None):
+                if (self.offIndex - self.onIndex) >= MIN_ON:
+                    return True 
+        else:
+            return False
+
+    def minOffHoursMet(self):
+        if (self.onIndex == None) and (self.offIndex == None):
+            #never been on
+            return True
+        elif (self.onIndex == None):
+            return True
+        elif self.offIndex != None:
+            if (self.index - self.offIndex + 1) > MIN_OFF: 
+                return True
+        else:
+            return False
+    def maxStartsMet(self):
+        return self.maxStartsMet == MAX_STARTS
+            
+
+    def minCycleLeft(self):
+        return (self.current + MIN_FULL < 23)
+
+    def updateOne(self):
+        self.schedule[self.index] = 1
+        if self.onIndex == None:
+            self.onIndex = self.index
+
+    def updateOffIndex(self):
+         
+        self.offIndex = self.index
+
+def BB(schedule):
+    if (schedule.getIndex() == LAST_INDEX):
+        potentialSchedules.add(tuple(schedule.getSchedule()))
+        return
     
-    def length(self):
-    	return len(self.sequence)
-    
-    def getSequence(self):
-    	return self.sequence
+    else:
 
-    def checkMinOn(self):
-    	return math.abs(self.currentOnEnd - self.currentOnStart) < MIN_ON 
+        if schedule.maxStartsMet():
+            potentialSchedules.add(tuple(schedule.getSchedule()))
 
-    def checkOn(self):
-    	return (self.currentOnStart != None)
+        elif schedule.getStatus() == 1:
+            if schedule.minOnHoursMet():
+                newScheduleOne = copy.copy(schedule)
+                newScheduleZero = copy.copy(schedule)
 
-    def checkOnNowOff(self):
-    	return (self.currentOnEnd != None) and (self.currentOffStart != None)
+                newScheduleOne.updateIndex()
+                newScheduleZero.updateIndex()
+                newScheduleZero.updateOffIndex()
+                BB(newScheduleZero)
+                BB(newScheduleOne) 
 
-    def checkMinOff(self):
-    	return math.abs(self.currentOffEnd - self.currentOffStart) < MIN_OFF
+        
+        else:
+            newScheduleOne = copy.copy(schedule)
+            newScheduleZero = copy.copy(schedule)
+            newScheduleOne.updateOne()
+            newScheduleOne.updateIndex()
+            newScheduleOne.updateOnIndex()
+            newScheduleZero.updateIndex()
 
-
-
-def BB(S):
-	length = S.length()
-	if length == TOTAL_HOURS: 
-		potentialSchedules.add(schedule)
-		return 
-	else:
-		#empty string
-		if length == 0:
-			BB(schedule + ONE)
-			BB(schedule + ZERO)
-		else: 
-
-			last = schedule[-1]
-			remainingHours = length + MIN_FULL
-			if remainingHours == TOTAL_HOURS:
-				if last == ZERO:
-					print("0 to FULL")
-					BB(schedule + (ONE * MIN_ON) + (ZERO * MIN_OFF))
-					BB(schedule + (ZERO * MIN_FULL))
-				else:
-					BB(schedule + ZERO * MIN_FULL)
-					BB(schedule + ONE)
-					
-				
-			elif remainingHours < TOTAL_HOURS:
-
-				if length < MIN_ON:
-					print("len < MIN_ON")
-					if last == ONE:
-						BB(schedule + ONE)
-				
-			else: 
-				print("ELSE")
-				BB(schedule + ONE)
-				BB(schedule + ZERO)
+            BB(newScheduleOne)
+            BB(newScheduleZero)
 
 if __name__ == '__main__':
-	starting = schedule("010101").checkOn()
-	print(starting)
-
-	
-	#BB2("")
-	#print(potentialSchedules)
-	#print(len(potentialSchedules))
-	
-
+    BB(schedule())
+    print(potentialSchedules)
