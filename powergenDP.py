@@ -76,7 +76,7 @@ for h in H:
 print(M)
 print(" ")
 
-s_prime = max(M[0], key=M[0].get)
+s_prime = 3#max(M[0], key=M[0].get)
 print("S': " + str(s_prime))
 max_profit = M[0][s_prime]
 print("Max Profit: " + str(max_profit))
@@ -86,18 +86,33 @@ V.append(is_on(s_prime))
 H = list(range(1, HOURS))
 
 for h in H:
+	print(" ")
 	if 0 < s_prime and s_prime < MIN_ON:
+		print("0 < s_prime and s_prime < MIN_ON")
+		print("hours: " + str(h))
+		print(s_prime)
 		s_prime += 1
 	elif -MIN_OFF < s_prime and s_prime < 0:
+		print("-MIN_OFF < s_prime and s_prime < 0")
+		print("hours: " + str(h))
+		print(s_prime)
 		s_prime -= 1
 	elif s_prime == MIN_ON:
+		print("s_prime == MIN_ON")
+		print("hours: " + str(h))
+		print(s_prime)
 		#if M[h-1][s_prime] - P[h-1] == M[h][s_prime]
 		if M[h-1][s_prime] == M[h][-1]:
 			s_prime = -1
 	elif s_prime == -MIN_OFF:
+		print("s_prime == -MIN_OFF")
+		print("hours: " + str(h))
+		print(s_prime)
 		if M[h-1][s_prime] + START == M[h][1]:
 			s_prime = 1
 	else:
+		print("hours: " + str(h))
+		print(s_prime)
 		s_prime = s_prime
 
 	V.append(is_on(s_prime))
