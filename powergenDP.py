@@ -11,9 +11,9 @@ def is_on(status):
 
 M = defaultdict(lambda : defaultdict(int))
 
-MIN_OFF = 2
-MIN_ON = 3
-HOURS = 6
+MIN_OFF = 65
+MIN_ON = 202
+HOURS = 8760
 START = 200
 S = list(range(-MIN_OFF, MIN_ON + 1))
 S.remove(0)
@@ -30,18 +30,18 @@ P = defaultdict(int)
 # P[3] = -100
 # P[4] = -100
 # P[5] = 200
-P[0] = 200
-P[1] = -200
-P[2] = -300
-P[3] = 700
-P[4] = -400
-P[5] = 100
+# P[0] = 200
+# P[1] = -200
+# P[2] = -300
+# P[3] = 700
+# P[4] = -400
+# P[5] = 100
 # P[6] = 200
 # P[7] = -100
 # P[8] = 200
 # P[9] = 300
-# for x in range(0, HOURS):
-# 	P[x] = random.randint(-40,100)
+for x in range(0, HOURS):
+ 	P[x] = random.randint(-100,100)
 
 end = HOURS - 1
 
@@ -82,7 +82,7 @@ for h in H:
 		if s == -MIN_OFF:
 			M[h][s] = max(M[h + 1][1] + P[h] - START, M[h + 1][s])
 				
-print(M)
+#print(M)
 print(" ")
 
 s_prime = max(M[0], key=M[0].get)
@@ -97,46 +97,46 @@ H = list(range(1, HOURS))
 for h in H:
 	print(" ")
 	if 0 < s_prime and s_prime < MIN_ON:
-		print("0 < s_prime and s_prime < MIN_ON")
-		print("hours: " + str(h))
-		print(s_prime)
+#		print("0 < s_prime and s_prime < MIN_ON")
+#		print("hours: " + str(h))
+#		print(s_prime)
 		s_prime += 1
-		print(s_prime)
-		print(M[h][s_prime])
+#		print(s_prime)
+#		print(M[h][s_prime])
 	elif -MIN_OFF < s_prime and s_prime < 0:
-		print("-MIN_OFF < s_prime and s_prime < 0")
-		print("hours: " + str(h))
-		print(s_prime)
+#		print("-MIN_OFF < s_prime and s_prime < 0")
+#		print("hours: " + str(h))
+#		print(s_prime)
 		s_prime -= 1
-		print(s_prime)
-		print(M[h][s_prime])
+#		print(s_prime)
+#		print(M[h][s_prime])
 	elif s_prime == MIN_ON:
-		print("s_prime == MIN_ON")
-		print("hours: " + str(h))
-		print(s_prime)
-		print("bye")
-		print(h)
-		print(M[h+1][s_prime]) 
-		print(M[h][-1])
-		print("hi")
+#		print("s_prime == MIN_ON")
+#		print("hours: " + str(h))
+#		print(s_prime)
+#		print("bye")
+#		print(h)
+#		print(M[h+1][s_prime]) 
+#		print(M[h][-1])
+#		print("hi")
 		#if M[h-1][s_prime] - P[h-1] == M[h][s_prime]
 		if M[h-1][s_prime] == M[h][-1]:
 			s_prime = -1
-			print(s_prime)
-			print(M[h][s_prime])
+#			print(s_prime)
+#			print(M[h][s_prime])
 	elif s_prime == -MIN_OFF:
-		print("s_prime == -MIN_OFF")
-		print("hours: " + str(h))
-		print(s_prime)
+#		print("s_prime == -MIN_OFF")
+#		print("hours: " + str(h))
+#		print(s_prime)
 		if M[h-1][s_prime] + START - P[h-1] == M[h][1]:
 			s_prime = 1
-			print(s_prime)
-			print(M[h][s_prime])
+#			print(s_prime)
+#			print(M[h][s_prime])
 	else:
-		print("hours: " + str(h))
-		print(s_prime)
+#		print("hours: " + str(h))
+#		print(s_prime)
 		s_prime = s_prime
-		print(M[h][s_prime])
+#		print(M[h][s_prime])
 
 	V.append(is_on(s_prime))
 print(max_profit)
