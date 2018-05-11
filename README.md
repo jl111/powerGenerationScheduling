@@ -1,4 +1,4 @@
-# powerGenerationScheduling
+# Profit Maximizing Scheduler for a Power Generator 
 Rice University Computational And Applied Mathematics Senior Design
 
 Team Members: Julio Ledesma, Jonathan Celaya, Margaret Gacheru
