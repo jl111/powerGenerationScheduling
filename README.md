@@ -1,5 +1,6 @@
 # powerGenerationScheduling
 Rice University Computational And Applied Mathematics Senior Design
+
 Team Members: Julio Ledesma, Jonathan Celaya, Margaret Gacheru
 
 # Summary
@@ -10,6 +11,7 @@ We found that implementing a dynamic programming approach produced efficient res
 Thus, the algorithm we have developed appears to be tractable as a fast, heuristic solution to the one generator power generator scheduling problem that is relatively easy to implement and modify based on the exact physical constraints of the generators. 
 
 powergenDP.py -- Implementation for two constraints
+
 powerGen3cons.py -- Implementation for three constraints
 
 Power Generation Report.pdf -- Report with problem statement, solution, and results
