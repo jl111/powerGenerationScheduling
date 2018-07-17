@@ -10,6 +10,10 @@ While this problem suffers from the curse of dimensionality, using dynamic progr
 
 Thus, the algorithm we have developed appears to be tractable as a fast, heuristic solution to the one generator power generator scheduling problem that is relatively easy to implement and modify based on the exact physical constraints of the generators. 
 
+# Algorithm Summary
+![oops, can't find image :(](https://raw.githubusercontent.com/jl111/powerGenerationScheduling/master/)
+
+
 # Source files
 powergenDP.py -- Implementation for two constraints
 
